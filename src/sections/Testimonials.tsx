@@ -1,6 +1,8 @@
+"use client";
 import { testimonials } from "@/utils/constant";
-import clsx from "clsx";
 import Image from "next/image";
+import { Fragment } from "react";
+import { motion } from "framer-motion";
 
 export const Testimonials = () => {
   const firstColumn = testimonials.slice(0, 3);
@@ -10,35 +12,50 @@ export const Testimonials = () => {
   const TestimonialsColoum = (props: {
     className?: string;
     testimonials: typeof testimonials;
+    duration?: number;
   }) => (
-    <div
-      className={clsx(
-        `flex flex-col gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]`,
-        props.className
-      )}
-    >
-      {props.testimonials.map((item, index) => {
-        return (
-          <div className="card" key={index}>
-            <div>{item.text}</div>
-            <div className="flex items-center gap-2 mt-5">
-              <Image
-                src={item.imageSrc}
-                width={40}
-                height={40}
-                alt={item.name}
-                className="h-10 w-10 rounded-full"
-              />
-              <div className="flex flex-col">
-                <div className="font-medium tracking-tight leading-5">
-                  {item.name}
+    <div className={props.className}>
+      <motion.div
+        animate={{
+          translateY: "-50%",
+        }}
+        transition={{
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: props.duration || 10,
+        }}
+        className={`flex flex-col gap-6 pb-6`}
+      >
+        {[...new Array(2)].fill(0).map((_, index) => (
+          <Fragment key={index}>
+            {props.testimonials.map((item, index) => {
+              return (
+                <div className="card" key={index}>
+                  <div>{item.text}</div>
+                  <div className="flex items-center gap-2 mt-5">
+                    <Image
+                      src={item.imageSrc}
+                      width={40}
+                      height={40}
+                      alt={item.name}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <div className="flex flex-col">
+                      <div className="font-medium tracking-tight leading-5">
+                        {item.name}
+                      </div>
+                      <div className="leading-5 tracking-tight">
+                        {item.username}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="leading-5 tracking-tight">{item.username}</div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+              );
+            })}
+          </Fragment>
+        ))}
+      </motion.div>
     </div>
   );
   return (
@@ -54,15 +71,17 @@ export const Testimonials = () => {
             essentail tool for users around the world.
           </p>
         </div>
-        <div className="flex justify-center gap-6">
-          <TestimonialsColoum testimonials={firstColumn} />
+        <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[738px] overflow-hidden">
+          <TestimonialsColoum testimonials={firstColumn} duration={15} />
           <TestimonialsColoum
             testimonials={secondColumn}
-            className="hidden md:flex"
+            className="hidden md:block"
+            duration={19}
           />
           <TestimonialsColoum
             testimonials={thirdColumn}
-            className="hidden lg:flex"
+            className="hidden lg:block"
+            duration={17}
           />
         </div>
       </div>
